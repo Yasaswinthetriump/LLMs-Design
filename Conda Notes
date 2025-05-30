@@ -1,0 +1,117 @@
+Conda Environment Setup on OpenShift AI (OCP)
+
+This guide outlines how to set up a Conda environment within OpenShift AI (RHODS) using a JupyterHub notebook server running in the mrmcd__jupyterhub namespace.
+
+
+---
+
+🧭 Step 1: Launch JupyterHub in OpenShift AI
+
+1. Log into your OpenShift Console.
+
+
+2. Navigate to OpenShift AI (RHODS) from the left-side panel.
+
+
+3. Click Launch JupyterHub.
+
+
+4. Choose the appropriate environment image (e.g., minimal CPU image or custom image).
+
+
+5. Select the namespace:
+
+mrmcd__jupyterhub
+
+
+6. Click Start Server.
+
+
+
+
+---
+
+🧪 Step 2: Verify Pod Creation in OpenShift
+
+Each time you launch a JupyterHub notebook, OpenShift creates a dedicated pod. To check:
+
+1. Go to Workloads > Pods in OpenShift Console.
+
+
+2. Filter by Namespace: mrmcd__jupyterhub
+
+
+3. You’ll see a pod with your username and the environment image you selected.
+
+
+4. You can view logs, YAML, and resource usage from the pod details.
+
+
+
+
+---
+
+🧱 Step 3: Set Up Conda Environment
+
+Once your Jupyter server is running:
+
+1. Open a terminal inside the notebook.
+
+
+2. Upload or create your environment.yml file. Example:
+
+
+
+name: base-cpu-env
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pandas
+  - requests
+  - ipykernel
+
+3. Create the environment:
+
+
+
+conda env create -f environment.yml
+
+4. Activate the environment:
+
+
+
+conda activate base-cpu-env
+
+5. Register it as a Jupyter kernel (optional):
+
+
+
+python -m ipykernel install --user --name base-cpu-env --display-name "Base CPU Env"
+
+
+---
+
+📊 Step 4: Check Conda Package Utilization
+
+To check which packages are installed:
+
+conda list
+
+To check environment size or disk usage (especially important due to PVC limits):
+
+du -sh ~/.conda/envs/base-cpu-env
+
+You can also monitor resource usage from the Pod details in OpenShift.
+
+
+---
+
+📎 Notes
+
+All environments and files are stored in the PVC (Persistent Volume Claim) attached to your notebook pod.
+
+If the PVC is 10Gi or more, you can safely install most base packages and work with small models or datasets.
+
+Avoid installing GPU-related packages unless your pod is GPU-enabled.
