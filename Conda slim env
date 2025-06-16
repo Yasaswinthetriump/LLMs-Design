@@ -1,0 +1,73 @@
+Slim Conda Environment (JFrog Compatible)
+name: slim-conda-env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - accelerate
+  - aiofiles
+  - aiohttp
+  - aiosqlite
+  - async-timeout
+  - chromadb
+  - cmake
+  - fastapi
+  - ffmpeg
+  - gensim
+  - httpx
+  - huggingface_hub
+  - ipykernel
+  - ipython
+  - jupyter_client
+  - jupyter_core
+  - jupyterlab
+  - jupyterlab_server
+  - matplotlib
+  - nltk
+  - numpy
+  - openpyxl
+  - pandas
+  - pgvector
+  - pinecone-client
+  - pip
+  - psutil
+  - pyarrow
+  - pydantic
+  - python
+  - pyyaml
+  - qdrant-client
+  - requests
+  - ruamel-yaml
+  - ruamel-yaml-clib
+  - safetensors
+  - scikit-learn
+  - scipy
+  - seaborn
+  - sentence-transformers
+  - sentencepiece
+  - setuptools
+  - six
+  - smart_open
+  - starlette
+  - statsmodels
+  - sympy
+  - tabulate
+  - tokenizers
+  - toml
+  - tomli
+  - torch
+  - torchaudio
+  - torchvision
+  - tqdm
+  - traitlets
+  - transformers
+  - typing-extensions
+  - uvicorn
+  - websocket-client
+  - wheel
+  - xlsxwriter
+  - yaml
+  - zipp
+  - zstandard
+
+
