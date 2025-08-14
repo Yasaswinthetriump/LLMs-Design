@@ -1,0 +1,4 @@
+MDD_JSON_PATH=C:/Users/Visvith/mdd_checker/docs/example_MDD.json
+GUIDELINES_JSON_PATH=C:/Users/Visvith/mdd_checker/docs/example_Guidelines.json
+PROMPTS_JSON_PATH=C:/Users/Visvith/mdd_checker/prompts.json
+OUTPUT_EXCEL_PATH=C:/Users/Visvith/mdd_checker/output/ValidationResults.xlsx
