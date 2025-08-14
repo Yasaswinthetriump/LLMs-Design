@@ -1,0 +1,58 @@
+from __future__ import annotations
+import os, argparse, logging
+from pathlib import Path
+
+try:
+    from dotenv import load_dotenv  # type: ignore
+except Exception:
+    load_dotenv = None
+
+from mdd_checker import run_checker
+
+def _abs(p: str | Path) -> Path:
+    return Path(p).expanduser().resolve()
+
+def _env_path(name: str, default: Path) -> Path:
+    v = os.getenv(name)
+    return _abs(v) if v else default
+
+def main() -> int:
+    logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"))
+    repo = Path(__file__).resolve().parent
+    if load_dotenv:
+        env_file = repo / ".env"
+        if env_file.exists():
+            load_dotenv(env_file)  # type: ignore
+
+    ap = argparse.ArgumentParser("Run the MDD checker locally (no hard-coded paths).")
+    ap.add_argument("--mdd-json", help="MDD JSON path")
+    ap.add_argument("--guidelines-json", help="Guidelines JSON path")
+    ap.add_argument("--prompts-json", help="Prompts JSON path")
+    ap.add_argument("--output-excel", help="Output Excel path")
+    ap.add_argument("--section-as-context", action="store_true", help="Use matching section text as context.")
+    args = ap.parse_args()
+
+    mdd_json = _abs(args.mdd_json) if args.mdd_json else _env_path("MDD_JSON_PATH", repo / "docs" / "example_MDD.json")
+    guidelines_json = _abs(args.guidelines_json) if args.guidelines_json else _env_path("GUIDELINES_JSON_PATH", repo / "docs" / "example_Guidelines.json")
+    prompts_json = _abs(args.prompts_json) if args.prompts_json else _env_path("PROMPTS_JSON_PATH", repo / "prompts.json")
+    output_excel = _abs(args.output_excel) if args.output_excel else _env_path("OUTPUT_EXCEL_PATH", repo / "output" / "ValidationResults.xlsx")
+
+    output_excel.parent.mkdir(parents=True, exist_ok=True)
+
+    print("MDD:", mdd_json)
+    print("Guidelines:", guidelines_json)
+    print("Prompts:", prompts_json)
+    print("Output:", output_excel)
+
+    df = run_checker(
+        str(mdd_json),
+        str(guidelines_json),
+        str(prompts_json),
+        str(output_excel),
+        args.section_as_context,
+    )
+    print(f"Rows written: {len(df)}")
+    return 0
+
+if __name__ == "__main__":
+    raise SystemExit(main())
